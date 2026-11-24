@@ -21,6 +21,6 @@ public boolean withdraw(int amt) {
 }
 
 public boolean canAfford(int amt) {
-	return false;
+	return false; //TODO implement check if you can afford the amount given return true when done
 }
 }
