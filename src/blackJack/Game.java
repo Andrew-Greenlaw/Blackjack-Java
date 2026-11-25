@@ -14,6 +14,7 @@ public Game(Player player, Hand hand, Deck deck) {
 	this.player = player;
 	this.hand = hand;
 	this.deck = deck;
+	String test = "test";
 }
 
 public void playRound() {
