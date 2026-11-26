@@ -39,6 +39,7 @@ public class BlackjackGui extends JFrame
 
 	/**
 	 * Create the frame.
+	 * Card deck images: https://mreliptik.itch.io/playing-cards-packs-52-cards
 	 */
 	public BlackjackGui()
 	{
@@ -46,11 +47,22 @@ public class BlackjackGui extends JFrame
 		setSize(1000, 700);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		
+		contentPane = new JPanel();
+		setContentPane(contentPane);
+		
 		cardLayout = new CardLayout();
 		contentPane.setLayout(cardLayout);
 		
-		gamePanel = new GamePanel();
-		storePanel = new StorePanel();
+		gamePanel = new GamePanel(this);
+		storePanel = new StorePanel(this);
+		
+		contentPane.add(gamePanel, "GAME");
+		contentPane.add(storePanel, "STORE");
 	}
-
+	
+	public void showScreen(String screenName)
+	{
+		cardLayout.show(contentPane, screenName);
+	}
 }
