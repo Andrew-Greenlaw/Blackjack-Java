@@ -15,13 +15,33 @@ import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import java.awt.GridLayout;
 
 public class GamePanel extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	
 	private BlackjackGui gui;
+	
+	private JLabel currBetLbl;
+	private JLabel betMultLbl;
+	private JLabel rndResultLbl;
 
+	private JTextField betTxtField;
+	private JButton chngBetBtn;
+	private JButton dealBtn;
+	private JButton hitBtn;
+	private JButton standBtn;
+
+	private JLabel balanceLbl;
+
+	private JLabel dealerLabel;
+
+	private JPanel dealerHandPanel;
+	private JPanel playerHandPanel;
+	
+	
 	/**
 	 * Create the panel.
 	 */
@@ -47,8 +67,49 @@ public class GamePanel extends JPanel
 	private JPanel createControlsPanel()
 	{
 		JPanel controlsPanel = new JPanel();
+		controlsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
 		controlsPanel.setPreferredSize(new Dimension(0, 70));
 		controlsPanel.setBackground(Color.DARK_GRAY);
+		
+		JPanel betInputPanel = new JPanel();
+		betInputPanel.setOpaque(false);
+		controlsPanel.add(betInputPanel);
+		
+		JLabel usdSignLbl = new JLabel("$");
+		usdSignLbl.setForeground(Color.WHITE);
+		usdSignLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		betInputPanel.add(usdSignLbl);
+		
+		betTxtField = new JTextField();
+		betTxtField.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		betTxtField.setText("25");
+		betTxtField.setPreferredSize(new Dimension(0, 28));
+		betTxtField.setColumns(10);
+		// Use in logic for disabling during a round: betTxtField.setEnabled(false);
+		betInputPanel.add(betTxtField);
+		
+		chngBetBtn = new JButton("Change Bet");
+		chngBetBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		chngBetBtn.setPreferredSize(new Dimension(110, 40));
+		//Use in logic for disabling during a round: chngBetBtn.setEnabled(false);
+		betInputPanel.add(chngBetBtn);
+		
+		dealBtn = new JButton("Deal");
+		dealBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		dealBtn.setPreferredSize(new Dimension(110, 40));
+		//Use in logic for disabling during a round: dealBtn.setEnabled(false);
+		controlsPanel.add(dealBtn);
+		
+		hitBtn = new JButton("Hit");
+		hitBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		hitBtn.setPreferredSize(new Dimension(110, 40));
+		controlsPanel.add(hitBtn);
+		
+		standBtn = new JButton("Stand");
+		standBtn.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		standBtn.setPreferredSize(new Dimension(110, 40));
+		controlsPanel.add(standBtn);
+		
 		return controlsPanel;
 	}
 
@@ -98,17 +159,15 @@ public class GamePanel extends JPanel
 	private JPanel createDealerPanel()
 	{
 		JPanel dealerPanel = new JPanel();
-		dealerPanel.setBackground(new Color(0, 106, 213));
+		dealerPanel.setBackground(new Color(124, 252, 0));
 		dealerPanel.setLayout(new BorderLayout(0, 0));
 		
-		// >>> Dealer label (NORTH)
-		JLabel dealerLabel = new JLabel("Dealer", SwingConstants.CENTER);
+		dealerLabel = new JLabel("Dealer: Fred", SwingConstants.CENTER);
 		dealerLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
 		dealerPanel.add(dealerLabel, BorderLayout.NORTH);
 		
-		// >>> Dealer's hand (CENTER)
-		JPanel dealerHandPanel = new JPanel();
-		dealerHandPanel.setBackground(Color.CYAN);
+		dealerHandPanel = new JPanel();
+		dealerHandPanel.setBackground(new Color(0, 180, 0));
 		dealerHandPanel.setLayout(new FlowLayout());
 		dealerPanel.add(dealerHandPanel, BorderLayout.CENTER);
 		
@@ -118,26 +177,47 @@ public class GamePanel extends JPanel
 	private JPanel createStatusPanel()
 	{
 		JPanel statusPanel = new JPanel();
+		statusPanel.setLayout(new GridLayout(2, 1));
 		statusPanel.setPreferredSize(new Dimension(0, 60));
-		statusPanel.setBackground(Color.ORANGE);
-		statusPanel.setLayout(new FlowLayout());
+		statusPanel.setBackground(new Color(0, 100, 0));
+		
+		JPanel betDisplayPanel = new JPanel();
+		betDisplayPanel.setOpaque(false);
+		statusPanel.add(betDisplayPanel);
+		
+		currBetLbl = new JLabel("Current Bet: $25");
+		currBetLbl.setForeground(Color.WHITE);
+		currBetLbl.setFont(new Font("Tahoma", Font.BOLD, 19));
+		betDisplayPanel.add(currBetLbl);
+		
+		betMultLbl = new JLabel(" x2");
+		betMultLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		betMultLbl.setForeground(Color.YELLOW);
+		//Use in logic for when a multiplier card is pulled: betMultLbl.setVisible(true);
+		betDisplayPanel.add(betMultLbl);
+		
+		rndResultLbl = new JLabel("Round Won! Natural Blackjack. Payout: 2.5x bet.");
+		rndResultLbl.setForeground(Color.WHITE);
+		rndResultLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		rndResultLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		statusPanel.add(rndResultLbl);
+		
 		return statusPanel;
 	}
 	
 	private JPanel createPlayerPanel()
 	{
 		JPanel playerPanel = new JPanel();
-		playerPanel.setBackground(Color.GREEN);
+		playerPanel.setBackground(new Color(124, 252, 0));
 		playerPanel.setLayout(new BorderLayout(0, 0));
 		
 		// >>> Player label (NORTH)
-		JLabel playerLabel = new JLabel("Player", SwingConstants.CENTER);
+		JLabel playerLabel = new JLabel("Player - 18", SwingConstants.CENTER);
 		playerLabel.setFont(new Font("SansSerif", Font.BOLD, 22));
 		playerPanel.add(playerLabel, BorderLayout.SOUTH);
 		
-		// >>> Player's hand (CENTER)
-		JPanel playerHandPanel = new JPanel();
-		playerHandPanel.setBackground(Color.YELLOW);
+		playerHandPanel = new JPanel();
+		playerHandPanel.setBackground(new Color(0, 180, 0));
 		playerHandPanel.setLayout(new FlowLayout());
 		playerPanel.add(playerHandPanel, BorderLayout.CENTER);
 		
@@ -154,7 +234,7 @@ public class GamePanel extends JPanel
 		
 		JButton storeBtn = new JButton("STORE");
 		storeBtn.setHorizontalAlignment(SwingConstants.RIGHT);
-		storeBtn.setBackground(Color.WHITE);
+		storeBtn.setBackground(new Color(255, 255, 255));
 		storeBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				gui.showScreen("STORE");
@@ -162,7 +242,7 @@ public class GamePanel extends JPanel
 		});
 		headerPanel.add(storeBtn, BorderLayout.EAST);
 		
-		JLabel balanceLbl = new JLabel("Balance: 0$");
+		balanceLbl = new JLabel("Balance: $0");
 		balanceLbl.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		balanceLbl.setForeground(Color.WHITE);
 		headerPanel.add(balanceLbl, BorderLayout.WEST);
